@@ -1,0 +1,3 @@
+com\example\produtoisapi\model\Product.class
+com\example\produtoisapi\ProdutoisapiApplication.class
+com\example\produtoisapi\controller\ProductController.class
