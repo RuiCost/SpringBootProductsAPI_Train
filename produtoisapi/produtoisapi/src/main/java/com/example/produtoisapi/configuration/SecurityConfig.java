@@ -67,7 +67,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http = http.cors().and().csrf().disable();
+		//http = http.cors().and().csrf().disable();
+
+		http = http.cors().and().csrf()
+				.ignoringAntMatchers("/h2-console/**") // permite uso da consola
+				.and();
 
 		http = http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
 
@@ -82,6 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(format("%s/**", swaggerPath)).permitAll()
 				// Our public endpoints
 				.antMatchers("/api/account/**").permitAll()
+				.antMatchers("/h2-console/**").permitAll()
 				//.antMatchers(HttpMethod.GET, "/api/plan/**").permitAll()
 				//.antMatchers(HttpMethod.GET, "/api/subscription/**").permitAll()
 				//.antMatchers(HttpMethod.GET, "/api/device/**").permitAll()
@@ -91,6 +96,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				//.antMatchers("/api/device/**").hasAnyRole(Role.ADMIN, Role.SUBSCRIBER)
 				//.antMatchers("/api/user/**").hasAnyRole(Role.ADMIN, Role.SUBSCRIBER, Role.PRODUCT_MANAGER, Role.MARKETING_DIRECTOR, Role.CUSTOMER, Role.FINANCIAL_DIRECTOR)
 				.anyRequest().authenticated()
+				//necessary for h2
+				.and().headers().frameOptions().disable()
 				// Set up oauth2 resource server
 				.and().httpBasic(Customizer.withDefaults()).oauth2ResourceServer().jwt();
 	}

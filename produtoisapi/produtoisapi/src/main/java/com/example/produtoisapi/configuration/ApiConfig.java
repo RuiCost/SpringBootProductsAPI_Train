@@ -34,10 +34,11 @@ public class ApiConfig {
 	/*
 	 * OpenAPI
 	 */
+
 	@Bean
 	public OpenAPI openApi() {
-		return new OpenAPI().info(new Info().title("ACME API").description("ACME API").version("v1.0")
-				.contact(new Contact().name("David Rodrigues").email("1211574@isep.ipp.pt")).termsOfService("TOC")
+		return new OpenAPI().info(new Info().title("Products API").description("Products API").version("v1.0")
+				.contact(new Contact().name("Rui Costa").email("1210971@isep.ipp.pt")).termsOfService("TOC")
 				.license(new License().name("MIT").url("#")));
 	}
 }
