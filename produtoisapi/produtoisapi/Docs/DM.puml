@@ -1,0 +1,73 @@
+@startuml
+class User{
+    -id (PK)
+    -username
+    -fullName
+    -password
+    -role
+}
+class UserProduto{
+
+   - IDUser (FK for User)
+   - IDProduct (FK for Product)
+   - Date
+   - Quantity
+
+}
+
+
+class Product {
+   -id (PK)
+   -name
+   -price
+   -description
+
+}
+
+
+
+
+class Category {
+
+  - id (PK)
+  - name
+  - description(opcional)
+
+}
+
+class Invoice {
+  - id (PK)
+  - IDUser (FK)
+  - Date
+  - TotalValue (total value of the products prices)
+  - PayMethod (ex: "MB Way", "Card", "Money")
+  - State(ex: "Paid", "Pending", "Canceled")
+
+}
+
+class ProductInvoice {
+ - id (PK)
+ - IDInvoice (FK)
+ - IDProduct (FK)
+ - Quantity
+
+}
+
+
+
+User "1" --> "*" Invoice
+User "1" --> "*" UserProduto
+User "1" --> "*" ProductInvoice
+
+UserProduto "*" --> "1" Product
+
+Product "1" --> "*" ProductInvoice
+Product "*" --> "1" Category
+
+Invoice "1" --> "*" ProductInvoice
+
+Category "1" --> "*" Product
+
+ProductInvoice "*" --> "1" Product
+ProductInvoice "*" --> "1" Invoice
+@enduml
