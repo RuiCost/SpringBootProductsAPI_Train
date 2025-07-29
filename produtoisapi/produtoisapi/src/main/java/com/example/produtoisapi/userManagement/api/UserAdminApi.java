@@ -102,7 +102,7 @@ public class UserAdminApi {
 	}
 
 	@Operation(summary = "Uploads a photo of a user - US015")
-	@RolesAllowed({Role.SUBSCRIBER, Role.ADMIN, Role.CUSTOMER, Role.PRODUCT_MANAGER, Role.MARKETING_DIRECTOR})
+	@RolesAllowed({Role.ADMIN, Role.CUSTOMER, })
 	@PostMapping("/photo")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<UploadFileResponse> uploadFile(@RequestParam("file") final MultipartFile file,
@@ -129,7 +129,7 @@ public class UserAdminApi {
 	}
 
 	@Operation(summary = "Uploads a set of photos of a user")
-	@RolesAllowed({Role.SUBSCRIBER, Role.ADMIN, Role.CUSTOMER, Role.PRODUCT_MANAGER, Role.MARKETING_DIRECTOR})
+	@RolesAllowed({ Role.ADMIN, Role.CUSTOMER,})
 	@PostMapping("/photos")
 	@ResponseStatus(HttpStatus.CREATED)
 	public List<UploadFileResponse> uploadMultipleFiles(@PathVariable("username") final String username,
@@ -151,7 +151,7 @@ public class UserAdminApi {
 
 
 	@Operation(summary = "Downloads a photo of a user")
-	@RolesAllowed({Role.SUBSCRIBER, Role.ADMIN, Role.CUSTOMER, Role.PRODUCT_MANAGER, Role.MARKETING_DIRECTOR})
+	@RolesAllowed({ Role.ADMIN, Role.CUSTOMER})
 	@GetMapping("/photo/{fileName:.+}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable final String fileName,
 												 final HttpServletRequest request) {

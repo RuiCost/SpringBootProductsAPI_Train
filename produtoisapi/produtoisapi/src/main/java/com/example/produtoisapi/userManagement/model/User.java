@@ -116,11 +116,8 @@ public class User implements UserDetails {
     public void addAuthority(final Role r) {
         Role r1 = new Role(Role.ADMIN);
         Role r2 = new Role(Role.CUSTOMER);
-        Role r3 = new Role(Role.SUBSCRIBER);
-        Role r4 = new Role(Role.MARKETING_DIRECTOR);
-        Role r5 = new Role(Role.PRODUCT_MANAGER);
-        Role r6 = new Role(Role.FINANCIAL_DIRECTOR);
-        if(r.equals(r1) || r.equals(r2) || r.equals(r3) || r.equals(r4) || r.equals(r5) || r.equals(r6))
+
+        if(r.equals(r1) || r.equals(r2) )
         {
             authorities.add(r);
         }

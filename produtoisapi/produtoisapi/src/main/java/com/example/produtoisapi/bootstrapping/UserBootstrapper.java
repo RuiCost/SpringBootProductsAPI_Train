@@ -34,31 +34,24 @@ public class UserBootstrapper implements CommandLineRunner {
             userRepo.save(u1);
         }
 
+        if (userRepo.findByUsername("admin1@mail.com").isEmpty()) {
+            final User u1 = new User("admin1@mail.com", encoder.encode("Admin123"), "Admin1");
+            u1.addAuthority(new Role(Role.ADMIN));
+            userRepo.save(u1);
+        }
+
         if (userRepo.findByUsername("customer@mail.com").isEmpty()) {
             final User u2 = new User("customer@mail.com", encoder.encode("Customer1"), "Customer");
             u2.addAuthority(new Role(Role.CUSTOMER));
             userRepo.save(u2);
         }
 
-        if (userRepo.findByUsername("md@mail.com").isEmpty()) {
-            final User u3 = new User("md@mail.com", encoder.encode("Marketing1"), "Marketing Director");
-            u3.addAuthority(new Role(Role.MARKETING_DIRECTOR));
-            userRepo.save(u3);
+        if (userRepo.findByUsername("customer1@mail.com").isEmpty()) {
+            final User u2 = new User("customer1@mail.com", encoder.encode("Customer2"), "Customer2");
+            u2.addAuthority(new Role(Role.CUSTOMER));
+            userRepo.save(u2);
         }
 
-        if (userRepo.findByUsername("pm@mail.com").isEmpty()) {
-            final User u4 = new User("pm@mail.com", encoder.encode("Product1"), "Product Manager");
-            u4.addAuthority(new Role(Role.PRODUCT_MANAGER));
-            userRepo.save(u4);
-        }
-
-
-
-        if (userRepo.findByUsername("fd@mail.com").isEmpty()) {
-            final User u6 = new User("fd@mail.com", encoder.encode("Financial1"), "Financial Director");
-            u6.addAuthority(new Role(Role.FINANCIAL_DIRECTOR));
-            userRepo.save(u6);
-        }
     }
 }
 
