@@ -15,4 +15,6 @@ public class ProductView {
     private Double price;
 
     private String description;
+
+    private CategoryView Category;
 }

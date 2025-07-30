@@ -21,6 +21,10 @@ public class CreateProductRequest {
     @Min(0)
     private Double price;
 
+
     @NotNull
     private String description;
+
+    @NotNull
+    private Long categoryId;
 }

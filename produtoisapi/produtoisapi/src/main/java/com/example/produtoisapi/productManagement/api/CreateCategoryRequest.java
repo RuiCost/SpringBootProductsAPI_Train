@@ -2,18 +2,14 @@ package com.example.produtoisapi.productManagement.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Min;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EditProductRequest {
-    @Min(0)
-    private Double price;
+public class CreateCategoryRequest   {
 
-    private String description;
-
+    private String name;
 
 }

@@ -26,14 +26,18 @@ public class Product {
     @NotNull
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @Version
     private long version;
     protected Product() {
     }
-    public Product(String name, Double price) {
+    public Product(String name, Double price, Category category) {
         this.name = name;
         this.price = price;
+        this.category=category;
     }
 
     public void applyPatch(final long desiredVersion, final double price, final String description){
