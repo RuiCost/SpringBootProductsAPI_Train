@@ -29,6 +29,11 @@ public interface ProductRepository extends CrudRepository<Product, String> {
     @Query("SELECT p FROM Product p ORDER BY p.name ASC")
     Page<Product> findAllProducts(Pageable pageable);
 
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Product p WHERE p.id = ?1 AND p.version = ?2")
+    int deleteByIdIfMatch(String id, long desiredVersion);
+
 
 
 }

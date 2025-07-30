@@ -20,5 +20,5 @@ public interface ProductService {
 
     Product partialUpdate(String id, EditProductRequest resource, long parseLong, User user);
 
-
+    int deleteById(String id, long desiredVersion);
 }

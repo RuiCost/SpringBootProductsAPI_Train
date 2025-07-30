@@ -86,11 +86,11 @@ public class ProductCrontroller {
     }
 
     @Operation(summary = "Gets a specific product by id")
-    @GetMapping(value = "/{name}")
+    @GetMapping(value = "/name/{name}")
     public ResponseEntity<ProductView> findByName(
             @PathVariable("name") @Parameter(description = "The id of the plan to find") final String name) {
-        final var plan = service.findProductByName(name).orElseThrow(() -> new NotFoundException(Product.class, name));
 
+        final var plan = service.findProductByName(name).orElseThrow(() -> new NotFoundException(Product.class, name));
         return ResponseEntity.ok().eTag(Long.toString(plan.getVersion())).body(productViewMapper.toProductView(plan));
     }
 
@@ -163,9 +163,9 @@ public class ProductCrontroller {
         }
         return Long.parseLong(ifMatchHeader);
     }
-   /* @Operation(summary = "Deletes an existing plan")
+    @Operation(summary = "Deletes an existing plan")
     @RolesAllowed({Role.ADMIN})
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "{id}")
     public ResponseEntity<ProductView> delete(final WebRequest request,
                                            @PathVariable("id") @Parameter(description = "The planType of the plan to delete") final String id) {
         final String ifMatchValue = request.getHeader("If-Match");
@@ -178,7 +178,7 @@ public class ProductCrontroller {
         return count == 1 ? ResponseEntity.noContent().build() : ResponseEntity.status(409).build();
     }
 
-    */
+
 
 
 

@@ -48,11 +48,31 @@ public class ProductServiceImpl implements ProductService {
         final var product = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Cannot update a Product that does not yet exist"));
 
-        product.applyPatch(desiredVersion,resource.getPrice(),resource.getDescription());
+        // We wont force user to update both ->
+
+        // Update price if needed
+        if (resource.getPrice() != null) {
+            if (resource.getPrice() < 0) {
+                throw new IllegalArgumentException("Price cannot be under 0 euros!");
+            }
+            product.setPrice(resource.getPrice());
+        }
+
+        // Update desc if needed
+        if (resource.getDescription() != null) {
+            if (resource.getDescription().isBlank()) {
+                throw new IllegalArgumentException("Description must not be blank");
+            }
+            product.setDescription(resource.getDescription());
+        }
 
         return repository.save(product);
+    }
 
 
+    @Override
+    public int deleteById(String id, long desiredVersion) {
+        return repository.deleteByIdIfMatch(id, desiredVersion);
     }
 
 
