@@ -1,10 +1,12 @@
 package com.example.produtoisapi.productManagement.api;
 
 
+import com.example.produtoisapi.productManagement.model.Product;
 import com.example.produtoisapi.productManagement.services.ProductService;
 import com.example.produtoisapi.userManagement.api.UploadFileResponse;
 import com.example.produtoisapi.userManagement.model.Role;
 import com.example.produtoisapi.userManagement.model.User;
+import com.example.produtoisapi.userManagement.repositories.UserRepository;
 import com.example.produtoisapi.userManagement.services.FileStorageService;
 import com.example.produtoisapi.utils.Utils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,8 +22,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.example.produtoisapi.exceptions.NotFoundException;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
@@ -45,11 +50,15 @@ public class ProductCrontroller {
 
     private final FileStorageService fileStorageService;
 
+    private final UserRepository userRepository;
 
     @Autowired
     private final Utils utils;
 
+    //CRUD
 
+
+    //Create
     @Operation(summary = " Create a Product")
     @RolesAllowed({Role.ADMIN})
     @PostMapping
@@ -63,8 +72,116 @@ public class ProductCrontroller {
                 .build().toUri();
 
         return ResponseEntity.created(newDeviceUri).eTag(Long.toString(product.getVersion()))
-                .body(productViewMapper.toPlanView(product));
+                .body(productViewMapper.toProductView(product));
     }
+
+    //Request
+    @Operation(summary = "Gets a specific product by id")
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ProductView> findById(
+            @PathVariable("id") @Parameter(description = "The id of the product to find") final String id) {
+        final var plan = service.findProductByID(id).orElseThrow(() -> new NotFoundException(Product.class, id));
+
+        return ResponseEntity.ok().eTag(Long.toString(plan.getVersion())).body(productViewMapper.toProductView(plan));
+    }
+
+    @Operation(summary = "Gets a specific product by id")
+    @GetMapping(value = "/{name}")
+    public ResponseEntity<ProductView> findByName(
+            @PathVariable("name") @Parameter(description = "The id of the plan to find") final String name) {
+        final var plan = service.findProductByName(name).orElseThrow(() -> new NotFoundException(Product.class, name));
+
+        return ResponseEntity.ok().eTag(Long.toString(plan.getVersion())).body(productViewMapper.toProductView(plan));
+    }
+
+
+    @Operation(summary = "Gets a specific product by id")
+    @GetMapping()
+    public Iterable<ProductView> findAll(@RequestParam("page") int page, @RequestParam("size") Integer size) {
+
+        // For now we wont worry about specifics to what users and admins can see
+        // For example we may have expired products but we dont need to show this to clients, only admins shoud see
+        // we can do this by adding : findAll(HttpServletRequest request, ...)
+        // And then something like:
+        /*
+
+                long id = utils.getUserByToken(request);
+
+        User user = userRepository.getById(id);
+
+        Set<Role> userRoles = user.getAuthorities();
+
+        Iterator<Role> iterator = userRoles.iterator();
+
+        Role firstRole = iterator.next();
+
+        String roleString = firstRole.toString();
+
+        String roleCustomer = "Role(authority=CUSTOMER)";
+        String roleAdmin = "Role(authority=ADMIN)";
+
+        if(roleString.equals(roleCustomer) || roleString.equals(roleSub))
+        {
+            return planViewMapper.toProductView(service.findAll_User(page, size));
+        }
+        else {
+            return planViewMapper.toProductView(service.findAll(page, size));
+        }
+         */
+
+        return productViewMapper.toProductView(service.findAll(page, size));
+    }
+
+
+    //Update
+
+
+    @Operation(summary = "Change description or price of product")
+    @RolesAllowed({Role.ADMIN})
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<ProductView> partialUpdate(HttpServletRequest request,
+                                                  @PathVariable("id") @Parameter(description = "The planType of the plan to update") final String idProduct,
+                                                  @Valid @RequestBody final EditProductRequest resource) {
+
+        final String ifMatchValue = request.getHeader("If-Match");
+        if (ifMatchValue == null || ifMatchValue.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "You must issue a conditional PATCH using 'if-match'");
+        }
+        Long id1 = utils.getUserByToken(request);
+        User user = userRepository.getById(id1);
+        final var plan = service.partialUpdate(idProduct, resource, getVersionFromIfMatchHeader(ifMatchValue),user);
+        return ResponseEntity.ok().eTag(Long.toString(plan.getVersion())).body(productViewMapper.toProductView(plan));
+    }
+
+
+    //Delete
+
+    private Long getVersionFromIfMatchHeader(final String ifMatchHeader) {
+        if (ifMatchHeader.startsWith("\"")) {
+            return Long.parseLong(ifMatchHeader.substring(1, ifMatchHeader.length() - 1));
+        }
+        return Long.parseLong(ifMatchHeader);
+    }
+   /* @Operation(summary = "Deletes an existing plan")
+    @RolesAllowed({Role.ADMIN})
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity<ProductView> delete(final WebRequest request,
+                                           @PathVariable("id") @Parameter(description = "The planType of the plan to delete") final String id) {
+        final String ifMatchValue = request.getHeader("If-Match");
+        if (ifMatchValue == null || ifMatchValue.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "You must issue a conditional DELETE using 'if-match'");
+        }
+        final int count = service.deleteById(id, getVersionFromIfMatchHeader(ifMatchValue));
+
+        return count == 1 ? ResponseEntity.noContent().build() : ResponseEntity.status(409).build();
+    }
+
+    */
+
+
+
 
     public UploadFileResponse doUploadFile(final String username, final MultipartFile file) {
 

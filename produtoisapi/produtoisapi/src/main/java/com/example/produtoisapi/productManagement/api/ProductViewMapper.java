@@ -6,9 +6,9 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public abstract class ProductViewMapper {
 
-    public abstract ProductView toPlanView(Product product);
+    public abstract ProductView toProductView(Product product);
 
-    public abstract Iterable<ProductView> toPlanView(Iterable<Product> products);
+    public abstract Iterable<ProductView> toProductView(Iterable<Product> products);
 
 
 }

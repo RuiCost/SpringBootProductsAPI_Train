@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-29T16:12:34+0100",
+    date = "2025-07-29T23:13:01+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.15 (Microsoft)"
 )
 @Component
 public class ProductViewMapperImpl extends ProductViewMapper {
 
     @Override
-    public ProductView toPlanView(Product product) {
+    public ProductView toProductView(Product product) {
         if ( product == null ) {
             return null;
         }
@@ -30,14 +30,14 @@ public class ProductViewMapperImpl extends ProductViewMapper {
     }
 
     @Override
-    public Iterable<ProductView> toPlanView(Iterable<Product> products) {
+    public Iterable<ProductView> toProductView(Iterable<Product> products) {
         if ( products == null ) {
             return null;
         }
 
         ArrayList<ProductView> iterable = new ArrayList<ProductView>();
         for ( Product product : products ) {
-            iterable.add( toPlanView( product ) );
+            iterable.add( toProductView( product ) );
         }
 
         return iterable;

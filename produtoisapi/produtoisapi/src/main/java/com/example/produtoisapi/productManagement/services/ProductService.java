@@ -12,4 +12,13 @@ public interface ProductService {
 
     Product create(CreateProductRequest resource);
 
+    Optional<Product> findProductByID(String id);
+
+    Optional<Product> findProductByName(String name);
+
+    Iterable<Product> findAll(int page, Integer size);
+
+    Product partialUpdate(String id, EditProductRequest resource, long parseLong, User user);
+
+
 }

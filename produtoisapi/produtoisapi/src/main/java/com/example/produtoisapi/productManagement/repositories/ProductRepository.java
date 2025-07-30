@@ -20,8 +20,15 @@ public interface ProductRepository extends CrudRepository<Product, String> {
     @Override
     Optional<Product> findById(String idProduct);
 
+    Optional<Product> findByName(String name);
+
+
+
 
     // Queries
+    @Query("SELECT p FROM Product p ORDER BY p.name ASC")
+    Page<Product> findAllProducts(Pageable pageable);
+
 
 
 }

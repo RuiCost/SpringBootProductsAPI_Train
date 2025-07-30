@@ -36,6 +36,14 @@ public class Product {
         this.price = price;
     }
 
+    public void applyPatch(final long desiredVersion, final double price, final String description){
+        if (this.version != desiredVersion) {
+            throw new StaleObjectStateException("Object was already modified by another user", this.id);
+        }
+        setPrice(price);
+        setDescription(description);
+    }
+
     public String getId() {
         return id;
     }
@@ -49,6 +57,9 @@ public class Product {
     }
 
     public void setName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name must not be null, nor blank");
+        }
         this.name = name;
     }
 
@@ -57,6 +68,9 @@ public class Product {
     }
 
     public void setPrice(Double price) {
+        if (price<0) {
+            throw new IllegalArgumentException("Price cannot be under 0 euros!");
+        }
         this.price = price;
     }
 
@@ -65,6 +79,9 @@ public class Product {
     }
 
     public void setDescription(String description) {
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("Description must not be null, nor blank");
+        }
         this.description = description;
     }
 
