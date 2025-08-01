@@ -25,7 +25,7 @@ public class CategoryController {
     private final CategoryViewMapper categoryViewMapper;
 
     @RolesAllowed({Role.ADMIN})
-    @PostMapping(value = "/name")
+    @PostMapping(value = "/{name}")
     public ResponseEntity<CategoryView> create(@PathVariable("name") String name) {
 
         if (!name.equals(name.toUpperCase())) {

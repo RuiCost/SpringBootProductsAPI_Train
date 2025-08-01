@@ -26,5 +26,5 @@ public class CreateProductRequest {
     private String description;
 
     @NotNull
-    private Long categoryId;
+    private Long category;
 }

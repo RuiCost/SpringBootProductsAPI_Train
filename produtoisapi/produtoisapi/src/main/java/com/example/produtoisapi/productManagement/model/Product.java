@@ -27,7 +27,7 @@ public class Product {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "idCategory")
     private Category category;
 
     @Version
@@ -91,5 +91,18 @@ public class Product {
 
     public long getVersion() {
         return version;
+    }
+
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
     }
 }

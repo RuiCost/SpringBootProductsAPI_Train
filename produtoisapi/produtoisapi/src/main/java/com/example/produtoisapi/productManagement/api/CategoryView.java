@@ -7,7 +7,7 @@ import lombok.Data;
 @Schema(description = "Category")
 public class CategoryView {
 
-    private Long id;
+    private Long idCategory;
     private String name;
 
 }
