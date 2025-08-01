@@ -22,6 +22,10 @@ public class Product {
     @Min(0)
     private Double price;
 
+    @Column(nullable = false)
+    @Min(0)
+    private Integer quantity;
+
     @Column()
     @NotNull
     private String description;
@@ -34,9 +38,10 @@ public class Product {
     private long version;
     protected Product() {
     }
-    public Product(String name, Double price, Category category) {
+    public Product(String name, Double price, Integer quantity ,Category category) {
         this.name = name;
         this.price = price;
+        this.quantity=quantity;
         this.category=category;
     }
 
@@ -104,5 +109,13 @@ public class Product {
 
     public void setVersion(long version) {
         this.version = version;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

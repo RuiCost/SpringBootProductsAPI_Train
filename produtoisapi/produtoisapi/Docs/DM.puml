@@ -27,6 +27,7 @@ class Product {
    -categoriaID (FK)
    -name
    -price
+   -quantity
    -description
    -categoria
 }

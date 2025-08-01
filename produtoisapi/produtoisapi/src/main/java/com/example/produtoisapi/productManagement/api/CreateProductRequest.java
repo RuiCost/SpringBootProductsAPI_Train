@@ -21,6 +21,8 @@ public class CreateProductRequest {
     @Min(0)
     private Double price;
 
+    @Min(0)
+    private Integer quantity;
 
     @NotNull
     private String description;

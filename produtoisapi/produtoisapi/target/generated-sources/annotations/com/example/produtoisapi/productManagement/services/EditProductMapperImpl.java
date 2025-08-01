@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-08-01T14:53:13+0100",
+    date = "2025-08-01T21:11:17+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.15 (Microsoft)"
 )
 @Component
@@ -23,12 +23,14 @@ public class EditProductMapperImpl extends EditProductMapper {
         String name = null;
         Double price = null;
         Category category = null;
+        Integer quantity = null;
 
         name = request.getName();
         price = request.getPrice();
         category = toCategory( request.getCategory() );
+        quantity = request.getQuantity();
 
-        Product product = new Product( name, price, category );
+        Product product = new Product( name, price, quantity, category );
 
         product.setDescription( request.getDescription() );
 

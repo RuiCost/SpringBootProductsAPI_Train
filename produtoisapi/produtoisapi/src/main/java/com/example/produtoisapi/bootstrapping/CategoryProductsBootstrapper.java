@@ -25,13 +25,13 @@ public class CategoryProductsBootstrapper implements CommandLineRunner {
             final Category c1 = new Category("DRINKS");
             categoryRepository.save(c1);
             if (productRepository.findByName("Água").isEmpty()) {
-                final Product product1 = new Product("Água", 1.10, c1);
+                final Product product1 = new Product("Água", 1.10,100, c1);
                 product1.setDescription("H2O");
                 productRepository.save(product1);
             }
 
             if (productRepository.findByName("Wine").isEmpty()) {
-                final Product product11 = new Product("Wine", 1.50, c1);
+                final Product product11 = new Product("Wine", 1.50, 50,c1);
                 product11.setDescription("Drunk bastard");
                 productRepository.save(product11);
             }
@@ -41,13 +41,13 @@ public class CategoryProductsBootstrapper implements CommandLineRunner {
             final Category c2 = new Category("MEAT");
             categoryRepository.save(c2);
             if (productRepository.findByName("Beef").isEmpty()) {
-                final Product product2 = new Product("Beef", 5.00, c2);
+                final Product product2 = new Product("Beef", 5.00, 20,c2);
                 product2.setDescription("It is beef, dude");
                 productRepository.save(product2);
             }
 
             if (productRepository.findByName("Lamb").isEmpty()) {
-                final Product product22 = new Product("Lamb", 7.00, c2);
+                final Product product22 = new Product("Lamb", 7.00, 25,c2);
                 product22.setDescription("Is lamb, man");
                 productRepository.save(product22);
             }
@@ -56,13 +56,13 @@ public class CategoryProductsBootstrapper implements CommandLineRunner {
             final Category c3 = new Category("FRUITS");
             categoryRepository.save(c3);
             if (productRepository.findByName("Apple").isEmpty()) {
-                final Product product3 = new Product("Apple", 5.00, c3);
+                final Product product3 = new Product("Apple", 5.00,70 ,c3);
                 product3.setDescription("You know what the doctors say, right?");
                 productRepository.save(product3);
             }
 
             if (productRepository.findByName("Orange").isEmpty()) {
-                final Product product33 = new Product("Orange", 7.00, c3);
+                final Product product33 = new Product("Orange", 7.00, 40,c3);
                 product33.setDescription("Vitamin-C");
                 productRepository.save(product33);
             }

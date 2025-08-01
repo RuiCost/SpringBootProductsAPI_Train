@@ -13,6 +13,9 @@ public class EditProductRequest {
     @Min(0)
     private Double price;
 
+    @Min(0)
+    private Integer quantity;
+
     private String description;
 
 
