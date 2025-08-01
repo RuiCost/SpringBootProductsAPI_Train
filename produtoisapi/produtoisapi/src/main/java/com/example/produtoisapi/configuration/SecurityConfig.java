@@ -39,6 +39,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 
 import static java.lang.String.format;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 @RequiredArgsConstructor
@@ -67,11 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		//http = http.cors().and().csrf().disable();
-
-		http = http.cors().and().csrf()
-				.ignoringAntMatchers("/h2-console/**") // permite uso da consola
-				.and();
+		http = http.cors().and().csrf().disable();
 
 		http = http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
 
@@ -86,18 +83,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(format("%s/**", swaggerPath)).permitAll()
 				// Our public endpoints
 				.antMatchers("/api/account/**").permitAll()
-				.antMatchers("/h2-console/**").permitAll()
-				//.antMatchers(HttpMethod.GET, "/api/plan/**").permitAll()
-				//.antMatchers(HttpMethod.GET, "/api/subscription/**").permitAll()
-				//.antMatchers(HttpMethod.GET, "/api/device/**").permitAll()
-				// Our private endpoints
-				//.antMatchers("/api/plan/**").hasAnyRole(Role.ADMIN, Role.MARKETING_DIRECTOR, Role.CUSTOMER, Role.FINANCIAL_DIRECTOR)
-				//.antMatchers("/api/subscription/**").hasAnyRole(Role.ADMIN, Role.SUBSCRIBER, Role.CUSTOMER, Role.PRODUCT_MANAGER,Role.FINANCIAL_DIRECTOR)
-				//.antMatchers("/api/device/**").hasAnyRole(Role.ADMIN, Role.SUBSCRIBER)
-				//.antMatchers("/api/user/**").hasAnyRole(Role.ADMIN, Role.SUBSCRIBER, Role.PRODUCT_MANAGER, Role.MARKETING_DIRECTOR, Role.CUSTOMER, Role.FINANCIAL_DIRECTOR)
+				.antMatchers("/api/product/**").permitAll()
+				.antMatchers("/api/category/**").permitAll()
+				.antMatchers("/api/user/**").hasAnyRole(Role.ADMIN,  Role.CUSTOMER)
 				.anyRequest().authenticated()
-				//necessary for h2
-				.and().headers().frameOptions().disable()
 				// Set up oauth2 resource server
 				.and().httpBasic(Customizer.withDefaults()).oauth2ResourceServer().jwt();
 	}
