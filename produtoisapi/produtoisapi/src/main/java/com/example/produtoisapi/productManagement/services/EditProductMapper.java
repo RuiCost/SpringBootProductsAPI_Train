@@ -19,8 +19,12 @@ public abstract class EditProductMapper {
 
     public abstract Product create(CreateProductRequest request);
 
-
+    // To also be able to show all info of the category along with product:
+    // To be able to see the info of catergory(id, name)  we  need to get the info associated to a category id
+   //Thus,...::
     public Category toCategory (final Long idCategory){
         return categoryRepository.findById(idCategory).orElseThrow(() -> new ValidationException("Select an existing category"));
     }
+
+
 }

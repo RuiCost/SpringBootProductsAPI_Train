@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Product {
 
     @Id
-    private String id = UUID.randomUUID().toString();
+    private String idProduct = UUID.randomUUID().toString();
 
     @Column(nullable = false, unique = true, updatable = false)
     @NotBlank
@@ -47,18 +47,18 @@ public class Product {
 
     public void applyPatch(final long desiredVersion, final double price, final String description){
         if (this.version != desiredVersion) {
-            throw new StaleObjectStateException("Object was already modified by another user", this.id);
+            throw new StaleObjectStateException("Object was already modified by another user", this.idProduct);
         }
         setPrice(price);
         setDescription(description);
     }
 
     public String getId() {
-        return id;
+        return idProduct;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.idProduct = id;
     }
 
     public String getName() {

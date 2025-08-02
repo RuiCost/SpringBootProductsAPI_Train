@@ -67,6 +67,7 @@ public class ProductCrontroller {
         final var product = service.create(resource);
 
 
+
         // for version control:
         final var newDeviceUri = ServletUriComponentsBuilder.fromCurrentRequestUri().pathSegment(product.getId().toString())
                 .build().toUri();

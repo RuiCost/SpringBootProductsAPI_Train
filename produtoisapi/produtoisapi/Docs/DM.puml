@@ -12,14 +12,7 @@ enum Role {
     CUSTOMER
 
 }
-class UserProduto{
 
-   - IDUser (FK for User)
-   - IDProduct (FK for Product)
-   - Date
-   - Quantity
-
-}
 
 
 class Product {
@@ -44,9 +37,9 @@ class Invoice {
   - id (PK)
   - IDUser (FK)
   - Date
-  - TotalValue (total value of the products prices)
-  - PayMethod (ex: "MB Way", "Card", "Money")
-  - State(ex: "Paid", "Pending", "Canceled")
+  - TotalValue
+  - PayMethod
+  - State
 
 }
 
@@ -61,10 +54,8 @@ class ProductInvoice {
 
 User "*" --> "1" Role
 User "1" --> "*" Invoice
-User "1" --> "*" UserProduto
-User "1" --> "*" ProductInvoice
 
-UserProduto "*" --> "1" Product
+
 
 Product "*" --> "1" Category
 

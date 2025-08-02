@@ -10,6 +10,7 @@ import javax.validation.constraints.Min;
 public class ProductView {
 
     private String id;
+
     private String name;
 
     private Double price;
