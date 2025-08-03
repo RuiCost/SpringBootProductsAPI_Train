@@ -71,8 +71,35 @@ public class InvoiceCrontroller {
     }
 
 
+    @PatchMapping(value="/{id}/paid")
+    public ResponseEntity<InvoiceView> changeStateOfInvoicetoPaid (@PathVariable("id") final Long id){
 
 
+        final var invoice = service.changeStateOfInvoicetoPaid(id);
+
+
+        return ResponseEntity.ok().body(invoiceViewMapper.toInvoiceView(invoice));
+    }
+
+    @PatchMapping(value="/{id}/cancel")
+    public ResponseEntity<InvoiceView> changeStateOfInvoicetoCANCEL (@PathVariable("id") final Long id){
+
+
+        final var invoice = service.changeStateOfInvoicetoCANCEL(id);
+
+
+        return ResponseEntity.ok().body(invoiceViewMapper.toInvoiceView(invoice));
+    }
+
+    @PatchMapping(value="/{id}/pending")
+    public ResponseEntity<InvoiceView> changeStateOfInvoicetoPENDING (@PathVariable("id") final Long id){
+
+
+        final var invoice = service.changeStateOfInvoicetoPENDING(id);
+
+
+        return ResponseEntity.ok().body(invoiceViewMapper.toInvoiceView(invoice));
+    }
 
 
 }

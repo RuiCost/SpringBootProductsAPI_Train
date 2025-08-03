@@ -14,5 +14,15 @@ public interface InvoiceService {
 
     Iterable<Invoice> findAll(int page, Integer size);
 
+    Invoice changeStateOfInvoicetoPaid(Long id);
+
+
+
+    Invoice changeStateOfInvoicetoCANCEL(Long id);
+
+
+    Invoice changeStateOfInvoicetoPENDING( Long id);
+
+
 
 }
