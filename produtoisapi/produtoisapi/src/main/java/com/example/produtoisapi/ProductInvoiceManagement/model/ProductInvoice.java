@@ -23,7 +23,7 @@ public class ProductInvoice {
     private Product product;
 
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "idInvoice",nullable = false)
     private Invoice invoice;
 

@@ -1,5 +1,6 @@
 package com.example.produtoisapi.ProductInvoiceManagement.api;
 
+import com.example.produtoisapi.invoiceManagement.api.InvoiceView;
 import com.example.produtoisapi.invoiceManagement.model.PayMethod;
 import com.example.produtoisapi.invoiceManagement.model.State;
 import com.example.produtoisapi.productManagement.api.ProductView;
@@ -15,9 +16,9 @@ import java.util.List;
 @Schema(description = "Product")
 public class ProductInvoiceView {
 
- private String idProduct;
+ private ProductView product;
 
- private Long idInvoice;
+ private InvoiceView invoice;
 
  private Double quantity;
 }

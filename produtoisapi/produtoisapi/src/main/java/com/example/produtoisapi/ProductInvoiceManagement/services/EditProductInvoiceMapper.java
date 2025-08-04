@@ -13,22 +13,32 @@ import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ValidationException;
-
 @Mapper(componentModel = "spring")
 public abstract class EditProductInvoiceMapper {
+
     @Autowired
     private ProductRepository productRepository;
 
     @Autowired
     private InvoiceRepository invoiceRepository;
 
-    public abstract ProductInvoice create(CreateProductInvoiceRequest request);
-
     public Product toProduct(final String idProduct) {
-        return productRepository.findById(idProduct).orElseThrow(() -> new ValidationException("Select an existing product"));
-    }
-    public Invoice toInvoice(final Long idInvoice) {
-        return invoiceRepository.findById(idInvoice).orElseThrow(() -> new ValidationException("Select an existing invoice"));
+        return productRepository.findById(idProduct)
+                .orElseThrow(() -> new ValidationException("Select an existing product"));
     }
 
+    public Invoice toInvoice(final Long idInvoice) {
+        return invoiceRepository.findById(idInvoice)
+                .orElseThrow(() -> new ValidationException("Select an existing invoice"));
+    }
+
+
+    public ProductInvoice create(CreateProductInvoiceRequest request) {
+        Product product = toProduct(request.getIdProduct());
+        Invoice invoice = toInvoice(request.getIdInvoice());
+        Double quantity = request.getQuantity();
+
+        return new ProductInvoice(product, invoice, quantity);
+    }
 }
+
