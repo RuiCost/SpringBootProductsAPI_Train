@@ -21,14 +21,33 @@ public class ProductInvoiceServiceImpl implements ProductInvoiceService {
 
     private final ProductInvoiceRepository repository;
 
+
+
     private final EditProductInvoiceMapper editProductMapper;
 
 
     @Override
     public ProductInvoice create(CreateProductInvoiceRequest resource) {
+
+        if (resource.getQuantity() == null || resource.getQuantity() <= 0) {
+            throw new IllegalArgumentException("Quantity must be greater than zero.");
+        }
+
+        final var existing = repository.findByInvoiceIdAndProductId(resource.getIdInvoice(), resource.getIdProduct());
+
+        if (existing.isPresent()) {
+            // Se já existe, atualizamos a quantidade
+            final var invoiceProduct = existing.get();
+            double newQuantity = invoiceProduct.getQuantity() + resource.getQuantity();
+            invoiceProduct.setQuantity(newQuantity);
+            return repository.save(invoiceProduct);
+        }
+
+        // Se não existe, criamos normalmente
         final ProductInvoice invoice = editProductMapper.create(resource);
         return repository.save(invoice);
     }
+
 
     @Override
     public Iterable<Invoice> findAll(int page, Integer size) {
