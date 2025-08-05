@@ -51,8 +51,18 @@ public class InvoiceCrontroller {
 
     private final InvoiceViewMapper invoiceViewMapper;
 
+    private final ProductInvoiceMapper productInvoiceMapper;
+
     @Autowired
     private Utils utils;
+
+    @GetMapping(value="/{id}/products")
+    public ResponseEntity<ProductsOfInvoiceView> getAllProductsOfInvoice(@PathVariable("id") final Long id) {
+        final var productInvoices = service.getAllProductInvoicesOfInvoice(id);
+        final var view = new ProductsOfInvoiceView();
+        view.setProducts(productInvoiceMapper.toViewList(productInvoices));
+        return ResponseEntity.ok().body(view);
+    }
 
     @PostMapping
     public ResponseEntity<InvoiceView> create(@Valid @RequestBody final CreateInvoiceRequest resource) {
@@ -100,6 +110,8 @@ public class InvoiceCrontroller {
 
         return ResponseEntity.ok().body(invoiceViewMapper.toInvoiceView(invoice));
     }
+
+
 
 
 }

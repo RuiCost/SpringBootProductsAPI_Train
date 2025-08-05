@@ -3,12 +3,13 @@ package com.example.produtoisapi.productManagement.api;
 import com.example.produtoisapi.productManagement.model.Category;
 import com.example.produtoisapi.productManagement.model.Product;
 import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-08-04T10:24:47+0100",
+    date = "2025-08-05T11:17:07+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.15 (Microsoft)"
 )
 @Component
@@ -44,6 +45,20 @@ public class ProductViewMapperImpl extends ProductViewMapper {
         }
 
         return iterable;
+    }
+
+    @Override
+    public List<ProductView> toProductView(List<Product> products) {
+        if ( products == null ) {
+            return null;
+        }
+
+        List<ProductView> list = new ArrayList<ProductView>( products.size() );
+        for ( Product product : products ) {
+            list.add( toProductView( product ) );
+        }
+
+        return list;
     }
 
     protected CategoryView categoryToCategoryView(Category category) {

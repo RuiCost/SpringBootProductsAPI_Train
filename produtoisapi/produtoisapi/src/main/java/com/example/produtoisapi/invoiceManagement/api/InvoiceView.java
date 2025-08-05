@@ -29,5 +29,4 @@ public class InvoiceView {
     // But for this project we will show all info of user that is related to the invoice that needs to be seen (not recommended)
     private UserView User;
 
-    private List<ProductView> products=new ArrayList<>();
 }
