@@ -30,8 +30,8 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 import com.example.produtoisapi.userManagement.model.Role;
 import com.example.produtoisapi.userManagement.repositories.UserRepository;
 
@@ -69,9 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		//http = http.cors().and().csrf().disable();
 
-		http = http.cors().and().csrf()
-				.ignoringAntMatchers("/h2-console/**") // permite uso da consola
-				.and();
+		http = http.cors().and().csrf().disable();
 
 		http = http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
 
@@ -132,16 +130,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	// Used by spring security if CORS is enabled.
 	@Bean
-	public CorsFilter corsFilter() {
-		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		final CorsConfiguration config = new CorsConfiguration();
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.addAllowedOrigin("*");
+		config.addAllowedOrigin("http://192.168.56.1:3000"); // IP do teu frontend
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
+		config.addExposedHeader("Authorization");  // THIS exposes the header
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
-		return new CorsFilter(source);
+		return source;
 	}
+
 
 	// Expose authentication manager bean
 	@Override

@@ -14,10 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.example.produtoisapi.userManagement.api.CreateUserRequest;
 import com.example.produtoisapi.userManagement.api.UserView;
 import com.example.produtoisapi.userManagement.api.UserViewMapper;
@@ -56,7 +53,7 @@ public class AuthApi {
             final User user = (User) authentication.getPrincipal();
 
             final Instant now = Instant.now();
-            final long expiry = 36000L; // 1 hours is usually too long for a token to be valid. adjust for production
+            final long expiry = 1436000L; // 1 hours is usually too long for a token to be valid. adjust for production
 
             final String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                     .collect(joining(" "));
