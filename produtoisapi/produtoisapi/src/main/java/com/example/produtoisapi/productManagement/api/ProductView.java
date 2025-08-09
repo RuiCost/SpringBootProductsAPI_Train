@@ -20,4 +20,7 @@ public class ProductView {
     private String description;
 
     private CategoryView Category;
+
+    private String imageURL;
+
 }

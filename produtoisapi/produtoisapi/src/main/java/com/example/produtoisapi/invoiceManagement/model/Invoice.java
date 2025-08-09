@@ -28,9 +28,6 @@ public class Invoice {
     @Column(nullable = false)
     private PayMethod payMethod;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private State state= State.PENDING;
 
 
     public Invoice(User user, PayMethod payMethod) {
@@ -82,11 +79,5 @@ public class Invoice {
         this.payMethod = payMethod;
     }
 
-    public State getState() {
-        return state;
-    }
 
-    public void setState(State state) {
-        this.state = state;
-    }
 }

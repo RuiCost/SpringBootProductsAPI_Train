@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,6 +35,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 @Tag(name="Products",description = "Products Endpoints")
 @RestController
@@ -57,6 +60,17 @@ public class ProductCrontroller {
 
     //CRUD
 
+    @Operation(summary = "Searches for products by query and optional category with pagination")
+    @GetMapping("/search")
+    public ResponseEntity<Iterable<ProductView>> searchProducts(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        final var resultPage = service.searchProducts(query, category, page, size);
+        return ResponseEntity.ok(productViewMapper.toProductView(resultPage));
+    }
 
     //Create
     @Operation(summary = " Create a Product")
@@ -202,16 +216,75 @@ public class ProductCrontroller {
 
 
     @Operation(summary = "Uploads a photo of a product")
-    @RolesAllowed({Role.ADMIN, Role.CUSTOMER, })
-    @PostMapping("/photo/{name}")
+    @RolesAllowed({Role.ADMIN, Role.CUSTOMER})
+    @PostMapping("/photo/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UploadFileResponse> uploadFile(@RequestParam("file") final MultipartFile file,
-        @PathVariable("name") @Parameter(description = "name of product that we want to give the foto") final String name) throws URISyntaxException {
-        System.out.println(name);
-        final UploadFileResponse up = doUploadFile(name, file);
-        return ResponseEntity.created(new URI(up.getFileDownloadUri())).body(up);
+    public ResponseEntity<UploadFileResponse> uploadFile(
+            HttpServletRequest request, // <-- Add this line
+            @RequestParam("file") final MultipartFile file,
+            @PathVariable("id") @Parameter(description = "ID of product that we want to give the photo") final String id
+    ) throws URISyntaxException {
 
+        // Faz o upload do ficheiro
+        final UploadFileResponse up = doUploadFile(file.getOriginalFilename(), file);
+
+        // Usa o service layer para obter o produto
+        final Product product = service.findProductByID(id)
+                .orElseThrow(() -> new NotFoundException(Product.class, id));
+
+        // Create edit request
+        EditProductRequest edit = new EditProductRequest();
+        edit.setImageURL(up.getFileDownloadUri()); // assuming `photo` is a field
+
+        Long userId = utils.getUserByToken(request);
+        User user = userRepository.getById(userId);
+
+        // Call your update logic (you may want to extract shared logic for reuse)
+        service.partialUpdate(product.getId(), edit, product.getVersion(), user);
+
+        return ResponseEntity.created(new URI(up.getFileDownloadUri())).body(up);
+    };
+
+    @Operation(summary = "Download a photo of a product by product ID")
+    @RolesAllowed({Role.ADMIN, Role.CUSTOMER})
+    @GetMapping("/photo/product/{id}")
+    public ResponseEntity<Resource> downloadProductImage(@PathVariable("id") String id, HttpServletRequest request) {
+        // Find product by ID
+        Product product = service.findProductByID(id)
+                .orElseThrow(() -> new NotFoundException(Product.class, id));
+
+        // Get the image URL or filename saved in product
+        String imageUrl = product.getImageURL();
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            // Return 404 or an empty black image resource, or null response
+            return ResponseEntity.notFound().build();
+        }
+
+        // Load the file as a Resource using your file storage service
+        Resource resource = fileStorageService.loadFileAsResource(extractFilenameFromURL(imageUrl));
+
+        // Try to determine file content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException e) {
+            // Default to binary stream if type can't be determined
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
+
+    // Helper method to extract filename from URL
+    private String extractFilenameFromURL(String url) {
+        // Assuming your URLs are like http://server/path/filename.ext
+        return Paths.get(URI.create(url).getPath()).getFileName().toString();
+    }
+
+
 
     @Operation(summary = "Downloads a photo of a user")
     @RolesAllowed({ Role.ADMIN, Role.CUSTOMER})

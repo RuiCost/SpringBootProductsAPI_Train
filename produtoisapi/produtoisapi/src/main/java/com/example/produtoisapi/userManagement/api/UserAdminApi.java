@@ -52,6 +52,14 @@ public class UserAdminApi {
 	@Autowired
 	private final Utils utils;
 
+	@Operation(summary = "Get user by token (authenticated user)")
+	@RolesAllowed({Role.ADMIN, Role.CUSTOMER})
+	@GetMapping("/me")
+	public UserView getUserByToken(HttpServletRequest request) {
+		Long userId = utils.getUserByToken(request);
+		return userService.getUser(userId);
+	}
+
 	@Operation(summary = "Get all users")
 	@RolesAllowed({Role.ADMIN})
 	@GetMapping(value = "/all")

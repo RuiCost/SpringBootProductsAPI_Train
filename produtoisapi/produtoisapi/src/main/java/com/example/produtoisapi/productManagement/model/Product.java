@@ -30,6 +30,9 @@ public class Product {
     @NotNull
     private String description;
 
+    @Column
+    private String imageURL;
+
     @ManyToOne
     @JoinColumn(name = "idCategory")
     private Category category;
@@ -117,5 +120,13 @@ public class Product {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageUrl) {
+        this.imageURL = imageUrl;
     }
 }

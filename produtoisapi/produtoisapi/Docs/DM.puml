@@ -14,6 +14,15 @@ enum Role {
 }
 
 
+class ShopingCart {
+ - id (pk)
+ -IDUser (FK)
+ -IDProduct (FK)
+ - quantity
+ -date
+}
+
+
 
 class Product {
    -id (PK)
@@ -39,7 +48,7 @@ class Invoice {
   - Date
   - TotalValue
   - PayMethod
-  - State
+
 
 }
 
@@ -51,7 +60,9 @@ class ProductInvoice {
 
 }
 
+User "1" --> "1" ShopingCart
 
+ShopingCart "1" --> "*" Product
 User "*" --> "1" Role
 User "1" --> "*" Invoice
 

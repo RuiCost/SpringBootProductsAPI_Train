@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-08-05T11:17:07+0100",
+    date = "2025-08-08T16:32:20+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.15 (Microsoft)"
 )
 @Component
@@ -64,6 +64,7 @@ public class ProductInvoiceViewMapperImpl extends ProductInvoiceViewMapper {
         productView.setQuantity( product.getQuantity() );
         productView.setDescription( product.getDescription() );
         productView.setCategory( categoryToCategoryView( product.getCategory() ) );
+        productView.setImageURL( product.getImageURL() );
 
         return productView;
     }
@@ -99,7 +100,6 @@ public class ProductInvoiceViewMapperImpl extends ProductInvoiceViewMapper {
         invoiceView.setStartDate( invoice.getStartDate() );
         invoiceView.setTotalPrice( invoice.getTotalPrice() );
         invoiceView.setPayMethod( invoice.getPayMethod() );
-        invoiceView.setState( invoice.getState() );
         invoiceView.setUser( userToUserView( invoice.getUser() ) );
 
         return invoiceView;

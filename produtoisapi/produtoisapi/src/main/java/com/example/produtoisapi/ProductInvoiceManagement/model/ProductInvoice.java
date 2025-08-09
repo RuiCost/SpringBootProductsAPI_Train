@@ -1,14 +1,10 @@
 package com.example.produtoisapi.ProductInvoiceManagement.model;
 
 import com.example.produtoisapi.invoiceManagement.model.Invoice;
-import com.example.produtoisapi.invoiceManagement.model.PayMethod;
-import com.example.produtoisapi.invoiceManagement.model.State;
 import com.example.produtoisapi.productManagement.model.Product;
-import com.example.produtoisapi.userManagement.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import java.time.LocalDate;
 
 @Entity
 public class ProductInvoice {

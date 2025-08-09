@@ -6,6 +6,7 @@ import com.example.produtoisapi.productManagement.model.Product;
 import com.example.produtoisapi.productManagement.repositories.ProductRepository;
 import com.example.produtoisapi.userManagement.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Page<Product> searchProducts(String query, String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        if ((query == null || query.isBlank()) && (category == null || category.isBlank())) {
+            return repository.findAllProducts(pageable);
+        }
+
+        return repository.searchWithFilters(query, category, pageable);
+    }
+
+    @Override
     public Product partialUpdate(String id, EditProductRequest resource, long desiredVersion, User user) {
         final var product = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Cannot update a Product that does not yet exist"));
@@ -64,6 +76,11 @@ public class ProductServiceImpl implements ProductService {
                 throw new IllegalArgumentException("Description must not be blank");
             }
             product.setDescription(resource.getDescription());
+        }
+
+        // ✅ Add support for updating the imageURL
+        if (resource.getImageURL() != null) {
+            product.setImageURL(resource.getImageURL());
         }
 
         return repository.save(product);

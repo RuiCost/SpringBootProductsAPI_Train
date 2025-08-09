@@ -34,6 +34,9 @@ public interface ProductRepository extends CrudRepository<Product, String> {
     @Query("DELETE FROM Product p WHERE p.id = ?1 AND p.version = ?2")
     int deleteByIdIfMatch(String id, long desiredVersion);
 
-
+    @Query(" SELECT p FROM Product p WHERE (:category IS NULL OR LOWER(p.category.name) = LOWER(:category))  AND (:query IS NULL OR  LOWER(p.name) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(p.description) LIKE LOWER(CONCAT('%', :query, '%'))) ")
+    Page<Product> searchWithFilters(@Param("query") String query,
+                                    @Param("category") String category,
+                                    Pageable pageable);
 
 }

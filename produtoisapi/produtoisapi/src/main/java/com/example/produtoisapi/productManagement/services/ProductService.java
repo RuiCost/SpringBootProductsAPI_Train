@@ -3,6 +3,7 @@ import com.example.produtoisapi.productManagement.api.CreateProductRequest;
 import com.example.produtoisapi.productManagement.api.EditProductRequest;
 import com.example.produtoisapi.productManagement.model.Product;
 import com.example.produtoisapi.userManagement.model.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +22,6 @@ public interface ProductService {
     Product partialUpdate(String id, EditProductRequest resource, long parseLong, User user);
 
     int deleteById(String id, long desiredVersion);
+
+    Page<Product> searchProducts(String query, String category, int page, int size);
 }

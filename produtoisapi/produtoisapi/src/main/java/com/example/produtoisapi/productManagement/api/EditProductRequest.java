@@ -18,5 +18,6 @@ public class EditProductRequest {
 
     private String description;
 
+    private String imageURL;
 
 }
