@@ -29,10 +29,22 @@ public class ShopingCartServiceImpl implements ShopingCartService {
 
     private final UserRepository userRepository;
 
+    private final ProductRepository productRepository;
     @Override
     public ShopingCart create(Long userId, CreateShopingCartRequest resource) {
-        final ShopingCart shopingCart = editShopingCartMapper.create(userId, resource);
-        return repository.save(shopingCart);
+
+        final var product = productRepository.findById(resource.getIdProduct())
+                .orElseThrow(() -> new NotFoundException("This product does not exist"));
+
+        Optional<ShopingCart> shopingCart = repository.findByUserIdAndProductId(userId,product.getId());
+
+        if(shopingCart.isPresent()){
+            throw new IllegalArgumentException("Your cart already has this product!!!!");
+        }
+
+        final ShopingCart shopingCart1 = editShopingCartMapper.create(userId, resource);
+
+        return repository.save(shopingCart1);
     }
 
 

@@ -15,6 +15,6 @@ public class CreateProductInvoiceRequest {
 
     private Long idInvoice;
 
-    private Double quantity;
+    private Integer quantity;
 
 }

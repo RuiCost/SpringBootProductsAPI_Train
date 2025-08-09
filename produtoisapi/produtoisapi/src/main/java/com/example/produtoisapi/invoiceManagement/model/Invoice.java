@@ -1,10 +1,13 @@
 package com.example.produtoisapi.invoiceManagement.model;
 
+import com.example.produtoisapi.ProductInvoiceManagement.model.ProductInvoice;
 import com.example.produtoisapi.userManagement.model.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Invoice {
@@ -28,6 +31,8 @@ public class Invoice {
     @Column(nullable = false)
     private PayMethod payMethod;
 
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProductInvoice> products = new ArrayList<>();
 
 
     public Invoice(User user, PayMethod payMethod) {
@@ -79,5 +84,11 @@ public class Invoice {
         this.payMethod = payMethod;
     }
 
+    public List<ProductInvoice> getProducts() {
+        return products;
+    }
 
+    public void setProducts(List<ProductInvoice> products) {
+        this.products = products;
+    }
 }

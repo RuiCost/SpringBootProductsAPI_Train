@@ -17,7 +17,7 @@ public interface InvoiceService {
     List<ProductInvoice> getAllProductInvoicesOfInvoice(Long id);
     Iterable<Invoice> findAll(int page, Integer size);
 
+    List<Invoice> getAllInvoicesOfUser(Long id);
 
-
-
+    List<Invoice> getAllInvoicesWithProductsOfUser(Long userId);
 }

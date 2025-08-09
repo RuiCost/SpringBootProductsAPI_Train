@@ -13,5 +13,5 @@ public class ProductInvoiceView {
 
  private InvoiceView invoice;
 
- private Double quantity;
+ private Integer quantity;
 }

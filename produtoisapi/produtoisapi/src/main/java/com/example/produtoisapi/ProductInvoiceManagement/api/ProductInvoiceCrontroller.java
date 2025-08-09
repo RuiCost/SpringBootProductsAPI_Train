@@ -2,6 +2,7 @@ package com.example.produtoisapi.ProductInvoiceManagement.api;
 
 
 import com.example.produtoisapi.ProductInvoiceManagement.services.ProductInvoiceService;
+import com.example.produtoisapi.ShopingCartManagement.services.ShopingCartService;
 import com.example.produtoisapi.invoiceManagement.api.CreateInvoiceRequest;
 import com.example.produtoisapi.invoiceManagement.services.InvoiceService;
 import com.example.produtoisapi.utils.Utils;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Tag(name="Invoice",description = "Invoice Endpoints")
@@ -23,6 +25,7 @@ public class ProductInvoiceCrontroller {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductInvoiceCrontroller.class);
 
+    private final ShopingCartService shopingCartService;
 
     private final ProductInvoiceService service;
 
@@ -32,7 +35,11 @@ public class ProductInvoiceCrontroller {
     private Utils utils;
 
     @PostMapping
-    public ResponseEntity<ProductInvoiceView> create(@Valid @RequestBody final CreateProductInvoiceRequest resource) {
+    public ResponseEntity<ProductInvoiceView> create(HttpServletRequest request, @Valid @RequestBody final CreateProductInvoiceRequest resource) {
+
+        Long userId = utils.getUserByToken(request);
+
+        shopingCartService.deleteCartByUserId(userId);
 
         final var producrInvoice = service.create(resource);
 

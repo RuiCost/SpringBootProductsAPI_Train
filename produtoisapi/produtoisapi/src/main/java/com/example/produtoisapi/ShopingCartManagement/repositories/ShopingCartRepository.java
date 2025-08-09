@@ -23,4 +23,12 @@ public interface ShopingCartRepository extends CrudRepository<ShopingCart,Long> 
     @Query("DELETE FROM ShopingCart s WHERE s.user = :user")
     void deleteAllByUser(@Param("user") User user);
 
+    @Query("SELECT s FROM ShopingCart s " +
+            "WHERE s.user.id = :userId AND s.product.idProduct = :productId")
+    Optional<ShopingCart> findByUserIdAndProductId(
+            @Param("userId") Long userId,
+            @Param("productId") String productId
+    );
+
+
 }

@@ -37,6 +37,8 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(name="Invoice",description = "Invoice Endpoints")
 @RestController
@@ -55,6 +57,45 @@ public class InvoiceCrontroller {
 
     @Autowired
     private Utils utils;
+
+
+    @GetMapping(value="/user")
+    public ResponseEntity<List<InvoiceView>> getAllInvoicesOfUser(HttpServletRequest request) {
+        Long userId = utils.getUserByToken(request);
+
+        var invoices = service.getAllInvoicesOfUser(userId);
+        var views = invoiceViewMapper.toInvoiceView(invoices);
+
+        return ResponseEntity.ok((List<InvoiceView>) views);
+    }
+    @GetMapping("/user/history")
+    public ResponseEntity<List<InvoiceHistoryView>> getInvoiceHistory(HttpServletRequest request) {
+        Long userId = utils.getUserByToken(request);
+        var invoices = service.getAllInvoicesWithProductsOfUser(userId);
+
+        List<InvoiceHistoryView> history = invoices.stream().map(invoice -> {
+            InvoiceHistoryView view = new InvoiceHistoryView();
+            view.setIdInvoice(invoice.getIdInvoice());
+            view.setStartDate(invoice.getStartDate());
+            view.setTotalPrice(invoice.getTotalPrice());
+            view.setPayMethod(invoice.getPayMethod()); // Não esquecer se quiseres mostrar método de pagamento
+
+            // Mapear produtos + quantidade
+            view.setProducts(invoice.getProducts().stream().map(pi -> {
+                ProductHistoryView phv = new ProductHistoryView();
+                phv.setIdProduct(pi.getProduct().getId());
+                phv.setName(pi.getProduct().getName());
+                phv.setPrice(pi.getProduct().getPrice());
+                phv.setQuantity(pi.getQuantity());
+                return phv;
+            }).collect(Collectors.toList()));
+
+            return view;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(history);
+    }
+
 
     @GetMapping(value="/{id}/products")
     public ResponseEntity<ProductsOfInvoiceView> getAllProductsOfInvoice(@PathVariable("id") final Long id) {

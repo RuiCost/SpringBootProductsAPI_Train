@@ -51,6 +51,14 @@ public class InvoiceServiceImpl implements InvoiceService {
         return repository.findAllProducts(pageable);
     }
 
+    @Override
+    public List<Invoice> getAllInvoicesOfUser(Long id) {
+        return repository.findAllInvoicesOfUser(id);
+    }
+    @Override
+    public List<Invoice> getAllInvoicesWithProductsOfUser(Long userId) {
+        return repository.findAllInvoicesWithProductsByUserId(userId);
+    }
 
 
 }

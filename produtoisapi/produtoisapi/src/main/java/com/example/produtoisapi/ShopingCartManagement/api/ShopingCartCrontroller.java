@@ -78,11 +78,9 @@ public class ShopingCartCrontroller {
 
     @PostMapping
     public ResponseEntity<ShopingCartView> create(HttpServletRequest request,@Valid @RequestBody final CreateShopingCartRequest resource) {
+
         Long userId = utils.getUserByToken(request);
         final var shopingCart = shopingCartService.create(userId,resource);
-
-
-
         // for version control:
         final var newDeviceUri = ServletUriComponentsBuilder.fromCurrentRequestUri().pathSegment(shopingCart.getIdShopingCart().toString())
                 .build().toUri();

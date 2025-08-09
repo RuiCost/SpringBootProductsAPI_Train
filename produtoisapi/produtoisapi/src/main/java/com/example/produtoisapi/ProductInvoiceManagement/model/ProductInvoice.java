@@ -26,9 +26,9 @@ public class ProductInvoice {
 
     @Column(nullable = false)
     @Min(0)
-    private Double quantity;
+    private Integer quantity;
 
-    public ProductInvoice(Product product, Invoice invoice, Double quantity) {
+    public ProductInvoice(Product product, Invoice invoice, Integer quantity) {
         this.product = product;
         this.invoice = invoice;
         this.quantity = quantity;
@@ -62,11 +62,11 @@ public class ProductInvoice {
         this.invoice = invoice;
     }
 
-    public Double getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Double quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 }

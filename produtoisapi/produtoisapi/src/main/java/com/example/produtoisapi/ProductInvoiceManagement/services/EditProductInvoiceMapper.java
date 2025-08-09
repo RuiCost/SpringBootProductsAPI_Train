@@ -36,7 +36,7 @@ public abstract class EditProductInvoiceMapper {
     public ProductInvoice create(CreateProductInvoiceRequest request) {
         Product product = toProduct(request.getIdProduct());
         Invoice invoice = toInvoice(request.getIdInvoice());
-        Double quantity = request.getQuantity();
+        Integer quantity = request.getQuantity();
 
         return new ProductInvoice(product, invoice, quantity);
     }
